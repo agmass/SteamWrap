@@ -980,7 +980,7 @@ extern "C"
 		if (!CheckInit())
 			return alloc_bool(false);
 
-		bool result = SteamUserStats()->RequestCurrentStats();
+		bool result = SteamUserStats()->RequestUserStats(SteamUser()->GetSteamID());
 		return alloc_bool(result);
 	}
 	DEFINE_PRIM(SteamWrap_RequestStats, 0);
@@ -1118,6 +1118,17 @@ extern "C"
 	}
 	DEFINE_PRIM(SteamWrap_OpenOverlay, 1);
 
+	//-----------------------------------------------------------------------------------------------------------
+	value SteamWrap_SetRichPresence(value key, value value)
+	{
+		if (!val_is_string(key) || !val_is_string(value) || !CheckInit())
+			return alloc_bool(false);
+
+		SteamFriends()->SetRichPresence( val_string(key), val_string(value) );
+		return alloc_bool(true);
+	}
+	DEFINE_PRIM(SteamWrap_SetRichPresence, 2);
+	
 	//-----------------------------------------------------------------------------------------------------------
 	value SteamWrap_StartUpdateUGCItem(value id, value itemID)
 	{
@@ -1498,16 +1509,6 @@ extern "C"
 	}
 	DEFINE_PRIM(SteamWrap_UploadScore, 3);
 
-	//-----------------------------------------------------------------------------------------------------------
-	value SteamWrap_DownloadScores(value name, value downloadType, value numBefore, value numAfter)
-	{
-		if (!val_is_string(name) || !val_is_int(downloadType) || !val_is_int(numBefore) || !val_is_int(numAfter) || !CheckInit())
-			return alloc_bool(false);
-
-		bool result = s_callbackHandler->DownloadScores(val_string(name), val_int(downloadType), val_int(numBefore), val_int(numAfter));
-		return alloc_bool(result);
-	}
-	DEFINE_PRIM(SteamWrap_DownloadScores, 4);
 
 	//-----------------------------------------------------------------------------------------------------------
 	value SteamWrap_RequestGlobalStats()
@@ -2512,6 +2513,7 @@ extern "C"
 			message->Release();
 			return alloc_bool(true);
 		}
+		return alloc_bool(false);
 	}
 	DEFINE_PRIM(SteamWrap_ReceiveMessage, 1);
 

@@ -169,6 +169,7 @@ class Steam {
 			SteamWrap_RequestGlobalStats = cpp.Lib.load("steamwrap", "SteamWrap_RequestGlobalStats", 0);
 			SteamWrap_RestartAppIfNecessary = cpp.Lib.load("steamwrap", "SteamWrap_RestartAppIfNecessary", 1);
 			SteamWrap_OpenOverlayToURL = cpp.Lib.load("steamwrap", "SteamWrap_OpenOverlayToURL", 1);
+			SteamWrap_SetRichPresence = cpp.Lib.load("steamwrap", "SteamWrap_SetRichPresence", 2);
 			SteamWrap_OpenOverlay = cpp.Lib.load("steamwrap", "SteamWrap_OpenOverlay", 1);
 			SteamWrap_BIsAppInstalled = cpp.Lib.load("steamwrap", "SteamWrap_BIsAppInstalled", 1);
 			SteamWrap_BIsDlcInstalled = cpp.Lib.load("steamwrap", "SteamWrap_BIsDlcInstalled", 1);
@@ -506,6 +507,17 @@ class Steam {
 		}
 
 		packetManager.onEnterFrame();
+	}
+
+	public static function setRichPresence(key:String, value:String):Bool {
+		if (!active)
+			return false;
+		try {
+			return SteamWrap_SetRichPresence(key,value);
+		} catch (e) {
+			trace(e);
+			return false;
+		}
 	}
 
 	public static function openOverlayToURL(url:String) {
@@ -873,6 +885,7 @@ class Steam {
 	private static var SteamWrap_IsSteamRunningOnSteamDeck:Dynamic;
 	private static var SteamWrap_GetCurrentGameLanguage:Dynamic;
 	private static var SteamWrap_OpenOverlayToURL:Dynamic;
+	private static var SteamWrap_SetRichPresence:String->String->Bool;
 	private static var SteamWrap_OpenOverlay:Dynamic;
 	private static var SteamWrap_BIsAppInstalled:Dynamic;
 	private static var SteamWrap_BIsDlcInstalled:Dynamic;
